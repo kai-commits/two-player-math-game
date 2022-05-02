@@ -5,11 +5,11 @@ class Game
     @rounds = rounds
   end
 
-  def question
+  def question(player)
     value1 = rand(1..20)
     value2 = rand(1..20)
+    puts "#{player.name}: What does #{value1} plus #{value2} equal?"
     answer = value1 + value2
-    {value1:, value2:, answer:}
   end
 
   def winner
@@ -19,21 +19,28 @@ class Game
     puts "Good bye!"
   end
 
+  def answer(player, input, correct)
+    if input == correct
+      puts "#{player.name}: YES! You are correct."
+    else
+      puts "#{player.name}: Seriously? No!"
+      player.lose_life
+    end
+  end
+
+  def end_round
+    @rounds += 1
+    puts "#{@player1.name} lives: #{@player1.lives}/3 vs #{@player2.name} lives: #{@player2.lives}/3"
+    puts "----- NEW TURN -----"
+  end
+
   def play
     while @player1.lives > 0 && @player2.lives > 0
       current_player = @rounds.even? ? @player2 : @player1
-      current_question = question
-      puts "#{current_player.name}: What does #{current_question[:value1]} plus #{current_question[:value2]} equal?"
-      answer = $stdin.gets.chomp
-      if answer.to_i == current_question[:answer]
-        puts "YES! You are correct."
-      else 
-        puts "#{current_player.name}: Seriously? No!"
-        current_player.lose_life
-      end
-      @rounds += 1
-      puts "#{@player1.name} lives: #{@player1.lives}/3 vs #{@player2.name} lives: #{@player2.lives}/3"
-      puts "----- NEW TURN -----"
+      current_question = question(current_player)
+      input = $stdin.gets.chomp.to_i
+      answer(current_player, input, current_question)
+      end_round
     end
     winner
   end
