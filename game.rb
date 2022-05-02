@@ -5,12 +5,6 @@ class Game
     @rounds = rounds
   end
 
-  def player
-    asker = @rounds.even? ? @player2 : @player1
-    guesser = @rounds.even? ? @player1 : @player2
-    {asker:, guesser:}
-  end
-
   def question
     value1 = rand(1..20)
     value2 = rand(1..20)
@@ -27,14 +21,15 @@ class Game
 
   def play
     while @player1.lives > 0 && @player2.lives > 0
+      current_player = @rounds.even? ? @player2 : @player1
       current_question = question
-      puts "#{player[:asker].name}: What does #{current_question[:value1]} plus #{current_question[:value2]} equal?"
+      puts "#{current_player.name}: What does #{current_question[:value1]} plus #{current_question[:value2]} equal?"
       answer = $stdin.gets.chomp
       if answer.to_i == current_question[:answer]
         puts "YES! You are correct."
       else 
-        puts "Seriously? No!"
-        player[:guesser].lose_life
+        puts "#{current_player.name}: Seriously? No!"
+        current_player.lose_life
       end
       @rounds += 1
       puts "#{@player1.name} lives: #{@player1.lives}/3 vs #{@player2.name} lives: #{@player2.lives}/3"
