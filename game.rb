@@ -14,7 +14,7 @@ class Game
 
   def winner
     winner = @player1.lives > 0 ? @player1 : @player2
-    puts "#{winner.name} wins with a score of #{winner.lives}/3"
+    puts "#{winner.name} wins with a score of #{winner.lives}/#{winner.total_lives}"
     puts "----- GAME OVER -----"
     puts "Good bye!"
   end
@@ -30,7 +30,8 @@ class Game
 
   def end_round
     @rounds += 1
-    puts "#{@player1.name} lives: #{@player1.lives}/3 vs #{@player2.name} lives: #{@player2.lives}/3"
+    puts "#{@player1.name} lives: #{@player1.lives}/#{@player1.total_lives}" +
+    " vs #{@player2.name} lives: #{@player2.lives}/#{@player2.total_lives}"
     puts "----- NEW TURN -----"
   end
 
